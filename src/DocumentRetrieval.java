@@ -7,6 +7,7 @@ public class DocumentRetrieval {
 
     /**
      * Pass two arguments: 1. The path of the directory of documents, 2. The path of the boolean query file
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -18,10 +19,10 @@ public class DocumentRetrieval {
         AbstractInvertedIndex caseSensitiveIndex = caseSensitiveFactory.createInvertedIndex();
         AbstractInvertedIndex caseSensitiveIndexTwo = caseSensitiveFactory.createInvertedIndex();
 
-        caseInsensitiveIndex.buildInvertedIndex( (new File(args[0])).listFiles());
-        caseSensitiveIndex.buildInvertedIndex( (new File(args[0])).listFiles());
+        caseInsensitiveIndex.buildInvertedIndex((new File(args[0])).listFiles());
+        caseSensitiveIndex.buildInvertedIndex((new File(args[0])).listFiles());
 
-        for (String query : Utils.readLines(new File (args[1]))){
+        for (String query : Utils.readLines(new File(args[1]))) {
             System.out.println("######################################");
             System.out.println("Query: " + query);
             System.out.println("----NonCaseSensitiveIndex----");
