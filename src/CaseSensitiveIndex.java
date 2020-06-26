@@ -10,13 +10,22 @@ public class CaseSensitiveIndex extends AbstractInvertedIndex {
     }
 
     @Override
-    public File[] buildInvertedIndex(File[] files) {
+    public void buildInvertedIndex(File[] files) {
         for (File file : files) {
             List<String> fileLines = Utils.readLines(file);
             for (String line : fileLines) {
+                String fileName = Utils.substringBetween(fileLines.get(1), "<DOCNO> ", " </DOCNO>");
                 String[] lineWordsArray = Utils.splitBySpace(line);
+                for (String word : lineWordsArray){
+                    if (!this.hashMap.containsKey(word)) {
+                        TreeSet<String> ts1 = new TreeSet<String>();
+                        ts1.add(fileName);
+                        this.hashMap.put(word, ts1);
+                    }else{
+                        this.hashMap.get(word).add(fileName);
+                    }
+                }
             }
         }
-        return null;
     }
 }

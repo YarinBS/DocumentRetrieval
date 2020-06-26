@@ -1,13 +1,85 @@
 import java.io.File;
-import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.*;
 
 public abstract class AbstractInvertedIndex {
-    HashMap hashMap;
+    HashMap<String, TreeSet<String>> hashMap;
 
-    public abstract File[] buildInvertedIndex(File[] lst);
+    public abstract void buildInvertedIndex(File[] lst);
 
-    public static TreeSet runQuery(String str){
-        return null;
+    public TreeSet runQuery(String str) {
+        TreeSet<String> returnedValue = new TreeSet<String>();
+
+//        int returnValue = 0;
+        String[] lineWords = str.split("\\W+");
+        List<String> operands = Arrays.asList("OR", "AND", "NOT");
+        Stack<String> stack = new Stack<String>();
+
+        for (String t : lineWords) {
+            if(this.getClass().getSimpleName()=="CaseInsensitiveIndex" && !operands.contains(t))
+            { t=t.toLowerCase();}
+            if (!operands.contains(t)) {
+                stack.push(t);
+            } else {
+                String a = stack.pop();
+                String b = stack.pop();
+                int index = operands.indexOf(t);
+                switch (index) {
+                    case 0:
+                        returnedValue= OR_op(a, b);
+                        stack.push(a+"or"+b+'*');
+                        this.hashMap.put(a+"or"+b+'*',returnedValue);
+                        break;
+                    case 1:
+                        returnedValue = AND_op(a, b);
+                        stack.push(a+"and"+b+'*');
+                        this.hashMap.put(a+"and"+b+'*',returnedValue);
+                        break;
+                    case 2:
+                        returnedValue=NOT_op(a, b);
+                        stack.push(a+"NOT"+b+'*');
+                        this.hashMap.put(a+"NOT"+b+'*',returnedValue);
+                        break;
+                }
+            }
+        }
+
+//        returnValue = Integer.valueOf(stack.pop());
+
+        return returnedValue;
     }
+
+    public TreeSet<String> OR_op(String a, String b) {
+        TreeSet<String> relevant_docs = new TreeSet<String>();
+        if (this.hashMap.containsKey(a)) {
+            relevant_docs.addAll((Collection) this.hashMap.get(a));
+        }
+        if (this.hashMap.containsKey(b)) {
+            relevant_docs.addAll((Collection) this.hashMap.get(b));
+        }
+        return relevant_docs;
+    }
+    public TreeSet<String> AND_op(String a, String b) {
+        TreeSet<String> relevant_docs = new TreeSet<String>();
+        List<String> list_a = (List<String>) this.hashMap.get(a);
+        List<String> list_b = (List<String>) this.hashMap.get(b);
+        for (String doc: list_a ) {
+            if(list_b.contains(doc)){
+                relevant_docs.add(doc);
+            }
+        }
+        return relevant_docs;
+    }
+    public TreeSet<String> NOT_op(String a, String b) {
+        TreeSet<String> relevant_docs = new TreeSet<String>();
+        List<String> list_a = (List<String>) this.hashMap.get(a);
+        List<String> list_b = (List<String>) this.hashMap.get(b);
+        for (String doc: list_a ) {
+            if(!list_b.contains(doc)){
+                relevant_docs.add(doc);
+            }
+        }
+        return relevant_docs;
+    }
+
+
 }
