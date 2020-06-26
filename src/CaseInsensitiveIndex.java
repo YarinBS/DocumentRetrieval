@@ -11,7 +11,7 @@ public class CaseInsensitiveIndex extends AbstractInvertedIndex {
     }
 
     @Override
-    public void buildInvertedIndex(File[] files) {
+    public void buildInvertedIndex(File[] files) { //case sensitive implementation
         for (File file : files) {
             List<String> fileLines = Utils.readLines(file);
             for (String line : fileLines) {
