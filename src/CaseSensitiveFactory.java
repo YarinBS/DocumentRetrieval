@@ -3,6 +3,9 @@ public class CaseSensitiveFactory extends AbstractInvertedIndexFactory {
 
     @Override
     public AbstractInvertedIndex createInvertedIndex() {
+        /**
+         * Implementation for createInvertedIndex
+         */
         if (caseSensitiveIndex == null) {
             caseSensitiveIndex = new CaseSensitiveIndex();
             System.out.println("New CaseSensitive index is created");
