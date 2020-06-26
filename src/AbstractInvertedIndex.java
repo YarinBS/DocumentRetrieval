@@ -43,7 +43,9 @@ public abstract class AbstractInvertedIndex {
             }
         }
 
-//        returnValue = Integer.valueOf(stack.pop());
+        while (!stack.empty()){
+            returnedValue.addAll(this.hashMap.get(stack.pop()));
+        }
 
         return returnedValue;
     }
@@ -73,8 +75,8 @@ public abstract class AbstractInvertedIndex {
         TreeSet<String> relevant_docs = new TreeSet<String>();
         TreeSet<String> tree_a = (TreeSet<String>) this.hashMap.get(a);
         TreeSet<String> tree_b = (TreeSet<String>) this.hashMap.get(b);
-        for (String doc: tree_a ) {
-            if(!tree_b.contains(doc)){
+        for (String doc: tree_b) {
+            if(!tree_a.contains(doc)){
                 relevant_docs.add(doc);
             }
         }
