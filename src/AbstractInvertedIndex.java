@@ -60,10 +60,10 @@ public abstract class AbstractInvertedIndex {
     }
     public TreeSet<String> AND_op(String a, String b) {
         TreeSet<String> relevant_docs = new TreeSet<String>();
-        List<String> list_a = (List<String>) this.hashMap.get(a);
-        List<String> list_b = (List<String>) this.hashMap.get(b);
-        for (String doc: list_a ) {
-            if(list_b.contains(doc)){
+        TreeSet<String> tree_a =  this.hashMap.get(a);
+        TreeSet<String> tree_b =  this.hashMap.get(b);
+        for (String doc: tree_a ) {
+            if(tree_b.contains(doc)){
                 relevant_docs.add(doc);
             }
         }
@@ -71,10 +71,10 @@ public abstract class AbstractInvertedIndex {
     }
     public TreeSet<String> NOT_op(String a, String b) {
         TreeSet<String> relevant_docs = new TreeSet<String>();
-        List<String> list_a = (List<String>) this.hashMap.get(a);
-        List<String> list_b = (List<String>) this.hashMap.get(b);
-        for (String doc: list_a ) {
-            if(!list_b.contains(doc)){
+        TreeSet<String> tree_a = (TreeSet<String>) this.hashMap.get(a);
+        TreeSet<String> tree_b = (TreeSet<String>) this.hashMap.get(b);
+        for (String doc: tree_a ) {
+            if(!tree_b.contains(doc)){
                 relevant_docs.add(doc);
             }
         }
